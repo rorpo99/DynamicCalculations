@@ -13,17 +13,17 @@ import java.util.LinkedList;
 @Component
 public class FormulaService {
 
-    private final static Map<String, Operator> OPS = new HashMap<>();
+    private final static Map<String, Operator> TOKEN_TO_OPERATION = new HashMap<>();
 
     static {
         for (Operator operator : Operator.values()) {
-            OPS.put(operator.symbol, operator);
+            TOKEN_TO_OPERATION.put(operator.symbol, operator);
         }
     }
 
     public Integer calculateResult(Formula formula) {
         List<String> tokens = tokenizeEquation(formula.getFormulaString());
-        List<String> postfixNotation = convertFormulaToReversePolishNotation(formula);
+        List<String> postfixNotation = convertFormulaToReversePolishNotation(tokens, formula);
         return evaluateFormula(postfixNotation);
     }
 
@@ -43,15 +43,17 @@ public class FormulaService {
                 continue;
             }
 
-            if (Character.isLetterOrDigit(currentChar) || currentChar == '.') {
+            if (Character.isLetterOrDigit(currentChar)) {
                 currentToken.append(currentChar);
-            } else if (currentChar == '(' || currentChar == ')') {
+            }
+            else if (currentChar == '(' || currentChar == ')') {
                 if (currentToken.length() > 0) {
                     tokens.add(currentToken.toString());
                     currentToken = new StringBuilder();
                 }
                 tokens.add(String.valueOf(currentChar));
-            } else {
+            }
+            else {
                 throw new IllegalArgumentException("Invalid character in equation: " + currentChar);
             }
         }
@@ -76,82 +78,79 @@ public class FormulaService {
         };
     }
 
-    private List<String> convertFormulaToReversePolishNotation(Formula formula) {
+    private List<String> convertFormulaToReversePolishNotation(List<String> tokens, Formula formula) {
 
-        List<String> tokens = tokenizeEquation(formula.getFormulaString());
-
-        List<String> output = new LinkedList<>();
+        List<String> result = new LinkedList<>();
         Stack<String> stack = new Stack<>();
 
         for (String token : tokens) {
-            if (OPS.containsKey(token)) {
-                while (!stack.isEmpty() && OPS.containsKey(stack.peek())) {
-                    Operator cOp = OPS.get(token);
-                    Operator lOp = OPS.get(stack.peek());
-                    if ((cOp.comparePrecedence(lOp) <= 0) || (cOp.comparePrecedence(lOp) < 0)) {
-                        output.add(stack.pop());
+            if (TOKEN_TO_OPERATION.containsKey(token)) {
+                while (!stack.isEmpty() && TOKEN_TO_OPERATION.containsKey(stack.peek())) {
+                    Operator currentOperation = TOKEN_TO_OPERATION.get(token);
+                    Operator lastOperation = TOKEN_TO_OPERATION.get(stack.peek());
+                    if (currentOperation.comparePrecedence(lastOperation) <= 0) {
+                        result.add(stack.pop());
                         continue;
                     }
                     break;
                 }
                 stack.push(token);
-            } else if ("(".equals(token)) {
+            }
+            else if ("(".equals(token)) {
                 stack.push(token);
-            } else if (")".equals(token)) {
+            }
+            else if (")".equals(token)) {
                 while (!stack.isEmpty() && !stack.peek().equals("(")) {
-                    output.add(stack.pop());
+                    result.add(stack.pop());
                 }
                 stack.pop();
-            } else {
+            }
+            else {
                 Integer paramValue = convertParamToActualValue(token, formula);
-                output.add(paramValue.toString());
+                result.add(paramValue.toString());
             }
         }
 
         while (!stack.isEmpty()) {
-            output.add(stack.pop());
+            result.add(stack.pop());
         }
 
-        return output;
+        return result;
     }
 
     private int evaluateFormula(List<String> tokens) {
         Stack<String> stack = new Stack<>();
-        int x, y;
-        String result;
+        int leftValue, rigthValue;
         String choice;
         int value;
-        String p = "";
 
-        for (String token : tokens) {
+        for (String token: tokens) {
 
-            if (!OPS.containsKey(token)) {
+            if (TOKEN_TO_OPERATION.containsKey(token)) {
+                choice = token;
+            }
+            else {
                 stack.push(token);
                 continue;
-            } else {
-                choice = token;
             }
 
             switch (choice) {
                 case "and" -> {
-                    x = Integer.parseInt(stack.pop());
-                    y = Integer.parseInt(stack.pop());
-                    value = x & y;
-                    result = p + value;
-                    stack.push(result);
+                    leftValue = Integer.parseInt(stack.pop());
+                    rigthValue = Integer.parseInt(stack.pop());
+                    value = leftValue & rigthValue;
+                    stack.push(String.valueOf(value));
                 }
                 case "or" -> {
-                    x = Integer.parseInt(stack.pop());
-                    y = Integer.parseInt(stack.pop());
-                    value = y | x;
-                    result = p + value;
-                    stack.push(result);
+                    leftValue = Integer.parseInt(stack.pop());
+                    rigthValue = Integer.parseInt(stack.pop());
+                    value = rigthValue | leftValue;
+                    stack.push(String.valueOf(value));
                 }
                 case "not" -> {
-                    x = Integer.parseInt(stack.pop());
-                    value = ~x;
-                    result = p + value;
-                    stack.push(result);
+                    leftValue = Integer.parseInt(stack.pop());
+                    value = ~leftValue;
+                    stack.push(String.valueOf(value));
                 }
                 default -> {
                 }
