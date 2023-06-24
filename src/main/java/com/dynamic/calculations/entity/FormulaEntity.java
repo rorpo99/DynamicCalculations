@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class FormulaEntity {
 
-    int id;
+    private int id;
 
     private String formulaString;
     private Integer x1;
@@ -24,6 +24,7 @@ public class FormulaEntity {
 
     public Formula convertToFormula() {
         Formula formula = new Formula();
+        formula.setId(this.id);
         formula.setFormulaString(this.formulaString);
         formula.setX1(this.x1);
         formula.setX2(this.x2);

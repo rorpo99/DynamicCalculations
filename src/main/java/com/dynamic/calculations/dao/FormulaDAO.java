@@ -1,6 +1,7 @@
 package com.dynamic.calculations.dao;
 
 import com.dynamic.calculations.dto.Formula;
+import com.dynamic.calculations.entity.FormulaEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -8,21 +9,21 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class FormulaDAO implements DAO<Formula>{
+public class FormulaDAO implements DAO<FormulaEntity>{
     private final JdbcTemplate jdbcTemplate;
 
     public FormulaDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Formula> getAll() {
-        return jdbcTemplate.query("SELECT * FROM formulas", new BeanPropertyRowMapper<>(Formula.class));
+    public List<FormulaEntity> getAll() {
+        return jdbcTemplate.query("SELECT * FROM formulas", new BeanPropertyRowMapper<>(FormulaEntity.class));
     }
 
-    public Formula get(int id) {
+    public FormulaEntity get(int id) {
         return jdbcTemplate.query(
                         "SELECT * FROM formulas WHERE id=?",
-                        new Object[] {id}, new BeanPropertyRowMapper<>(Formula.class))
+                        new Object[] {id}, new BeanPropertyRowMapper<>(FormulaEntity.class))
                 .stream().findAny().orElse(null);
     }
 
@@ -33,7 +34,7 @@ public class FormulaDAO implements DAO<Formula>{
                 .stream().findAny().orElse(null);
     }
 
-    public void create(Formula formula) {
+    public void create(FormulaEntity formula) {
         jdbcTemplate.update("INSERT INTO formulas (formula_string, x1, x2, x3, x4, x5, result) VALUES(?, ?, ?, ?, ?, ?, ?)",
                 formula.getFormulaString(),
                 formula.getX1(),
@@ -44,7 +45,7 @@ public class FormulaDAO implements DAO<Formula>{
                 formula.getResult());
     }
 
-    public void update(Formula updatedFormula, int id) {
+    public void update(FormulaEntity updatedFormula, int id) {
         jdbcTemplate.update("UPDATE formulas SET formula_string=?, x1=?, x2=?, x3=?, x4=?, x5=?, result=? WHERE id=?",
                 updatedFormula.getFormulaString(),
                 updatedFormula.getX1(),

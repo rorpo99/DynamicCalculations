@@ -1,6 +1,5 @@
 package com.dynamic.calculations.controller;
 
-import com.dynamic.calculations.dao.FormulaDAO;
 import com.dynamic.calculations.dto.Formula;
 import com.dynamic.calculations.service.FormulaService;
 import lombok.RequiredArgsConstructor;
@@ -14,18 +13,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FormulaController {
 
-    private final FormulaDAO formulaDao;
-
     private final FormulaService formulaService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Formula> displayHistory() {
-        return formulaDao.getAll();
+        return formulaService.getAll();
     }
 
     @GetMapping("{id}")
     public Formula displayFormulaDetails(@PathVariable("id") int id) {
-        return formulaDao.get(id);
+        return formulaService.getFormula(id);
     }
 
     @PostMapping(
@@ -33,20 +30,16 @@ public class FormulaController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public void calculateResult(@RequestBody Formula newFormula) {
-        Integer result = formulaService.calculateResult(newFormula);
-        newFormula.setResult(result);
-        formulaDao.create(newFormula);
+        formulaService.createFormula(newFormula);
     }
 
     @PutMapping("{id}")
     public void updateFormula(@RequestBody Formula updatedFormula) {
-        Integer result = formulaService.calculateResult(updatedFormula);
-        updatedFormula.setResult(result);
-        formulaDao.update(updatedFormula, updatedFormula.getId());
+        formulaService.updateFormula(updatedFormula);
     }
 
     @DeleteMapping("{id}")
     public void deleteFormula(@PathVariable("id") int id) {
-        formulaDao.delete(id);
+        formulaService.deleteFormula(id);
     }
 }

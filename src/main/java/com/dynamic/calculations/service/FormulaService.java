@@ -1,7 +1,9 @@
 package com.dynamic.calculations.service;
 
+import com.dynamic.calculations.dao.DAO;
 import com.dynamic.calculations.dto.Formula;
-import org.springframework.stereotype.Component;
+import com.dynamic.calculations.entity.FormulaEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -11,10 +13,12 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.LinkedList;
 
-//@Component
-
 @Service
+@RequiredArgsConstructor
 public class FormulaService {
+
+
+    private final DAO<FormulaEntity> formulaDao;
 
     private final static Map<String, Operator> TOKEN_TO_OPERATION = new HashMap<>();
 
@@ -24,12 +28,36 @@ public class FormulaService {
         }
     }
 
-    public Integer calculateResult(Formula formula) {
+    public List<Formula> getAll() {
+        List<FormulaEntity> formulas = formulaDao.getAll();
+        return formulas.stream().map(FormulaEntity::convertToFormula).toList();
+    }
+
+    public Formula getFormula(int id) {
+        return formulaDao.get(id).convertToFormula();
+    }
+
+    public void createFormula(Formula newFormula) {
+        Integer result = calculateResult(newFormula);
+        newFormula.setResult(result);
+        formulaDao.create(newFormula.convertToFormulaEntity());
+    }
+
+    public void updateFormula(Formula updatedFormula) {
+        Integer result = calculateResult(updatedFormula);
+        updatedFormula.setResult(result);
+        formulaDao.update(updatedFormula.convertToFormulaEntity(), updatedFormula.getId());
+    }
+
+    public void deleteFormula(int id) {
+        formulaDao.delete(id);
+    }
+
+    private Integer calculateResult(Formula formula) {
         List<String> tokens = tokenizeEquation(formula.getFormulaString());
         List<String> postfixNotation = convertFormulaToReversePolishNotation(tokens, formula);
         return evaluateFormula(postfixNotation);
     }
-
 
     private List<String> tokenizeEquation(String equation) {
         List<String> tokens = new ArrayList<>();
