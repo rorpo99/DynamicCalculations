@@ -23,11 +23,10 @@ public class FormulaController {
         return formulaDao.getAll();
     }
 
-//    @GetMapping("{id}")
-//    public String displayFormulaDetails(@PathVariable("id") int id) {
-//        model.addAttribute("person", personDAO.show(id));
-//        return "show";
-//    }
+    @GetMapping("{id}")
+    public Formula displayFormulaDetails(@PathVariable("id") int id) {
+        return formulaDao.get(id);
+    }
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -37,5 +36,17 @@ public class FormulaController {
         Integer result = formulaService.calculateResult(newFormula);
         newFormula.setResult(result);
         formulaDao.create(newFormula);
+    }
+
+    @PutMapping("{id}")
+    public void updateFormula(@RequestBody Formula updatedFormula) {
+        Integer result = formulaService.calculateResult(updatedFormula);
+        updatedFormula.setResult(result);
+        formulaDao.update(updatedFormula, updatedFormula.getId());
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteFormula(@PathVariable("id") int id) {
+        formulaDao.delete(id);
     }
 }

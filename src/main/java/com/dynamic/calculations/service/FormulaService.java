@@ -2,6 +2,7 @@ package com.dynamic.calculations.service;
 
 import com.dynamic.calculations.dto.Formula;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -10,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Stack;
 import java.util.LinkedList;
 
-@Component
+//@Component
+
+@Service
 public class FormulaService {
 
     private final static Map<String, Operator> TOKEN_TO_OPERATION = new HashMap<>();

@@ -44,8 +44,16 @@ public class FormulaDAO implements DAO<Formula>{
                 formula.getResult());
     }
 
-    public void update(Formula formula, int id) {
-
+    public void update(Formula updatedFormula, int id) {
+        jdbcTemplate.update("UPDATE formulas SET formula_string=?, x1=?, x2=?, x3=?, x4=?, x5=?, result=? WHERE id=?",
+                updatedFormula.getFormulaString(),
+                updatedFormula.getX1(),
+                updatedFormula.getX2(),
+                updatedFormula.getX3(),
+                updatedFormula.getX4(),
+                updatedFormula.getX5(),
+                updatedFormula.getResult(),
+                id);
     }
 
 
