@@ -18,10 +18,6 @@ public class Formula {
     private Integer x5;
     private Integer result;
 
-    public Formula(String formulaString) {
-        this.formulaString = formulaString;
-    }
-
     public FormulaEntity convertToFormulaEntity() {
         FormulaEntity formulaEntity = new FormulaEntity();
         formulaEntity.setFormulaString(this.formulaString);

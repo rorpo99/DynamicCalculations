@@ -27,10 +27,10 @@ public class FormulaDAO implements DAO<FormulaEntity>{
                 .stream().findAny().orElse(null);
     }
 
-    public Formula getByFormulaString(String formula) {
+    public FormulaEntity getByFormulaString(String formula) {
         return jdbcTemplate.query(
                         "SELECT * FROM formulas WHERE formula_string=?",
-                        new Object[] {formula}, new BeanPropertyRowMapper<>(Formula.class))
+                        new Object[] {formula}, new BeanPropertyRowMapper<>(FormulaEntity.class))
                 .stream().findAny().orElse(null);
     }
 
