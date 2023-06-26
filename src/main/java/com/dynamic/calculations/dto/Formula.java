@@ -1,7 +1,10 @@
 package com.dynamic.calculations.dto;
 
 import com.dynamic.calculations.entity.FormulaEntity;
+import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
 
 @Getter
 @Setter
@@ -10,6 +13,9 @@ import lombok.*;
 @NoArgsConstructor
 public class Formula {
     private int id;
+
+    @Nonnull
+    @NotEmpty
     private String formulaString;
     private Integer x1;
     private Integer x2;

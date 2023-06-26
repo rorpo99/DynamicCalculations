@@ -105,7 +105,7 @@ public class FormulaService {
             case "x5" -> formula.getX5();
             case "true" -> 1;
             case "false" -> 0;
-            default -> -1;
+            default -> throw new RuntimeException("Value of formula's parameter is missing");
         };
     }
 

@@ -2,6 +2,7 @@ package com.dynamic.calculations.controller;
 
 import com.dynamic.calculations.dto.Formula;
 import com.dynamic.calculations.service.FormulaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +30,12 @@ public class FormulaController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public void calculateResult(@RequestBody Formula newFormula) {
+    public void calculateResult(@RequestBody @Valid Formula newFormula) {
         formulaService.createFormula(newFormula);
     }
 
     @PutMapping("{id}")
-    public void updateFormula(@RequestBody Formula updatedFormula) {
+    public void updateFormula(@RequestBody @Valid Formula updatedFormula) {
         formulaService.updateFormula(updatedFormula);
     }
 
