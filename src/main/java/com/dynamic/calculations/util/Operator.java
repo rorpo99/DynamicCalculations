@@ -1,4 +1,4 @@
-package com.dynamic.calculations.service;
+package com.dynamic.calculations.util;
 
 public enum Operator implements Comparable<Operator> {
     NOT("not", 2),

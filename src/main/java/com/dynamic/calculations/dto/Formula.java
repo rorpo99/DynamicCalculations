@@ -1,6 +1,5 @@
 package com.dynamic.calculations.dto;
 
-import com.dynamic.calculations.entity.FormulaEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -24,15 +23,4 @@ public class Formula {
     private Integer x5;
     private Integer result;
 
-    public FormulaEntity convertToFormulaEntity() {
-        FormulaEntity formulaEntity = new FormulaEntity();
-        formulaEntity.setFormulaString(this.formulaString);
-        formulaEntity.setX1(this.x1);
-        formulaEntity.setX2(this.x2);
-        formulaEntity.setX3(this.x3);
-        formulaEntity.setX4(this.x4);
-        formulaEntity.setX5(this.x5);
-        formulaEntity.setResult(this.result);
-        return formulaEntity;
-    }
 }
