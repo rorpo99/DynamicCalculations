@@ -15,11 +15,9 @@ import static com.dynamic.calculations.util.FormulaUtil.calculateResult;
 
 @Service
 @RequiredArgsConstructor
-public class FormulaService {
-
+public class FormulaService implements IFormulaService {
 
     private final DAO<FormulaEntity> formulaDao;
-
 
     public List<Formula> getAll() {
         List<FormulaEntity> formulas = formulaDao.getAll();
@@ -27,7 +25,7 @@ public class FormulaService {
     }
 
     public Formula getFormula(int id) {
-        return convertToFormula(formulaDao.get(id));
+        return convertToFormula(formulaDao.get(id).get());
     }
 
     public void createFormula(Formula newFormula) {

@@ -1,12 +1,12 @@
 package com.dynamic.calculations.dao;
 
-import com.dynamic.calculations.dto.Formula;
 import com.dynamic.calculations.entity.FormulaEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FormulaDAO implements DAO<FormulaEntity>{
@@ -20,18 +20,18 @@ public class FormulaDAO implements DAO<FormulaEntity>{
         return jdbcTemplate.query("SELECT * FROM formulas", new BeanPropertyRowMapper<>(FormulaEntity.class));
     }
 
-    public FormulaEntity get(int id) {
-        return jdbcTemplate.query(
+    public Optional<FormulaEntity> get(int id) {
+        return Optional.ofNullable(jdbcTemplate.query(
                         "SELECT * FROM formulas WHERE id=?",
-                        new Object[] {id}, new BeanPropertyRowMapper<>(FormulaEntity.class))
-                .stream().findAny().orElse(null);
+                        new Object[]{id}, new BeanPropertyRowMapper<>(FormulaEntity.class))
+                .stream().findAny().orElse(null));
     }
 
-    public FormulaEntity getByFormulaString(String formula) {
-        return jdbcTemplate.query(
+    public Optional<FormulaEntity> getByFormulaString(String formula) {
+        return Optional.ofNullable(jdbcTemplate.query(
                         "SELECT * FROM formulas WHERE formula_string=?",
-                        new Object[] {formula}, new BeanPropertyRowMapper<>(FormulaEntity.class))
-                .stream().findAny().orElse(null);
+                        new Object[]{formula}, new BeanPropertyRowMapper<>(FormulaEntity.class))
+                .stream().findAny().orElse(null));
     }
 
     public void create(FormulaEntity formula) {

@@ -5,8 +5,16 @@ public enum Operator implements Comparable<Operator> {
     AND("and", 1),
     OR("or", 0);
 
-    public final String symbol;
-    final int precedence;
+    private final String symbol;
+    private final int precedence;
+
+    public String getSymbol() {
+        return this.symbol;
+    }
+
+    public int getPrecedence() {
+        return this.precedence;
+    }
 
     Operator(String symbol, int precedence) {
         this.symbol = symbol;

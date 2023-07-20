@@ -63,7 +63,7 @@ public class FormulaDaoTests {
 
     @Test
     public void retrieveRecordById() {
-        FormulaEntity formula = dao.get(1);
+        FormulaEntity formula = dao.get(1).get();
         assertEquals("x1 and x2 or not x3", formula.getFormulaString());
         assertEquals( 1, formula.getX1());
         assertEquals( 2, formula.getX2());
@@ -72,7 +72,7 @@ public class FormulaDaoTests {
 
     @Test
     public void retrieveRecordByFormulaString() {
-        FormulaEntity formula = dao.getByFormulaString("x1 and x2 or not x3");
+        FormulaEntity formula = dao.getByFormulaString("x1 and x2 or not x3").get();
         assertNotNull(formula);
     }
 
@@ -92,7 +92,7 @@ public class FormulaDaoTests {
         dao.create(formula);
 
         assertEquals(6, dao.getAll().size());
-        FormulaEntity retrievedFormula = dao.get(6);
+        FormulaEntity retrievedFormula = dao.get(6).get();
         assertEquals("x1 and x5", retrievedFormula.getFormulaString());
         assertEquals(1, retrievedFormula.getX1());
         assertEquals(5, retrievedFormula.getX5());
@@ -102,11 +102,11 @@ public class FormulaDaoTests {
     @Test
     @Transactional
     public void updateRecord() {
-        FormulaEntity formula = dao.get(5);
+        FormulaEntity formula = dao.get(5).get();
         assertEquals("not x4 and x2", formula.getFormulaString());
         formula.setFormulaString("x3 or (x4 and x5)");
         dao.update(formula, 5);
-        FormulaEntity retrievedFormula = dao.get(5);
+        FormulaEntity retrievedFormula = dao.get(5).get();
         assertEquals("x3 or (x4 and x5)", retrievedFormula.getFormulaString());
     }
 

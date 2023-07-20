@@ -10,7 +10,7 @@ public class FormulaUtil {
 
     static {
         for (Operator operator : Operator.values()) {
-            TOKEN_TO_OPERATION.put(operator.symbol, operator);
+            TOKEN_TO_OPERATION.put(operator.getSymbol(), operator);
         }
     }
 
