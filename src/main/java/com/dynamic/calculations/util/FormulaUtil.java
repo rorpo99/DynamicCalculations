@@ -73,7 +73,7 @@ public class FormulaUtil {
             case "true" -> 1;
             case "false" -> 0;
             default -> throw new InvalidFormulaException("The symbol '" + token + "' containing in formula is not allowed. " +
-                    "You can use only: x1, x2, x3, x4, x5, true, false");
+                    "You can use only: x1, x2, x3, x4, x5, true, false.");
         };
     }
 
@@ -106,6 +106,9 @@ public class FormulaUtil {
             }
             else {
                 Integer paramValue = convertParamToActualValue(token, formula);
+                if (paramValue == null) {
+                    throw new InvalidFormulaException("Input value of " + token + "!");
+                }
                 result.add(paramValue.toString());
             }
         }

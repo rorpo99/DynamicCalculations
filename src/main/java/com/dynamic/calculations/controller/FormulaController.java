@@ -28,7 +28,6 @@ public class FormulaController {
     }
 
     @PostMapping(
-            produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public void calculateResult(@RequestBody @Valid Formula newFormula) throws InvalidFormulaException {
