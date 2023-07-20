@@ -1,6 +1,7 @@
 package com.dynamic.calculations.util;
 
 import com.dynamic.calculations.dto.Formula;
+import com.dynamic.calculations.exception.InvalidFormulaException;
 
 import java.util.*;
 
@@ -14,13 +15,18 @@ public class FormulaUtil {
         }
     }
 
-    public static Integer calculateResult(Formula formula) {
+    public static Integer calculateResult(Formula formula) throws InvalidFormulaException {
         List<String> tokens = tokenizeEquation(formula.getFormulaString());
         List<String> postfixNotation = convertFormulaToReversePolishNotation(tokens, formula);
         return evaluateFormula(postfixNotation);
     }
 
-    private static List<String> tokenizeEquation(String equation) {
+    private static List<String> tokenizeEquation(String equation) throws InvalidFormulaException {
+
+        if (equation.trim().isEmpty()) {
+            throw new InvalidFormulaException("must not be empty");
+        }
+
         List<String> tokens = new ArrayList<>();
         StringBuilder currentToken = new StringBuilder();
 
@@ -46,7 +52,7 @@ public class FormulaUtil {
                 tokens.add(String.valueOf(currentChar));
             }
             else {
-                throw new IllegalArgumentException("Invalid character in equation: " + currentChar);
+                throw new InvalidFormulaException("Invalid operation or bracket symbol in formula: " + currentChar);
             }
         }
 
@@ -57,7 +63,7 @@ public class FormulaUtil {
         return tokens;
     }
 
-    private static Integer convertParamToActualValue(String token, Formula formula) {
+    private static Integer convertParamToActualValue(String token, Formula formula) throws InvalidFormulaException {
         return switch (token) {
             case "x1" -> formula.getX1();
             case "x2" -> formula.getX2();
@@ -66,11 +72,12 @@ public class FormulaUtil {
             case "x5" -> formula.getX5();
             case "true" -> 1;
             case "false" -> 0;
-            default -> throw new RuntimeException("Value of formula's parameter is missing");
+            default -> throw new InvalidFormulaException("The symbol '" + token + "' containing in formula is not allowed. " +
+                    "You can use only: x1, x2, x3, x4, x5, true, false");
         };
     }
 
-    private static List<String> convertFormulaToReversePolishNotation(List<String> tokens, Formula formula) {
+    private static List<String> convertFormulaToReversePolishNotation(List<String> tokens, Formula formula) throws InvalidFormulaException {
 
         List<String> result = new LinkedList<>();
         Stack<String> stack = new Stack<>();
@@ -144,8 +151,7 @@ public class FormulaUtil {
                     value = ~leftValue;
                     stack.push(String.valueOf(value));
                 }
-                default -> {
-                }
+                default -> {}
             }
         }
         return Integer.parseInt(stack.pop());

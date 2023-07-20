@@ -17,7 +17,7 @@ public class FormulaDAO implements DAO<FormulaEntity>{
     }
 
     public List<FormulaEntity> getAll() {
-        return jdbcTemplate.query("SELECT * FROM formulas", new BeanPropertyRowMapper<>(FormulaEntity.class));
+        return jdbcTemplate.query("SELECT * FROM formulas ORDER BY last_updated_at desc", new BeanPropertyRowMapper<>(FormulaEntity.class));
     }
 
     public Optional<FormulaEntity> get(int id) {
@@ -46,7 +46,7 @@ public class FormulaDAO implements DAO<FormulaEntity>{
     }
 
     public void update(FormulaEntity updatedFormula, int id) {
-        jdbcTemplate.update("UPDATE formulas SET formula_string=?, x1=?, x2=?, x3=?, x4=?, x5=?, result=? WHERE id=?",
+        jdbcTemplate.update("UPDATE formulas SET formula_string=?, x1=?, x2=?, x3=?, x4=?, x5=?, result=?, last_updated_at=current_timestamp WHERE id=?",
                 updatedFormula.getFormulaString(),
                 updatedFormula.getX1(),
                 updatedFormula.getX2(),

@@ -3,6 +3,7 @@ package com.dynamic.calculations.service;
 import com.dynamic.calculations.dao.DAO;
 import com.dynamic.calculations.dto.Formula;
 import com.dynamic.calculations.entity.FormulaEntity;
+import com.dynamic.calculations.exception.InvalidFormulaException;
 import com.dynamic.calculations.util.FormulaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,13 @@ public class FormulaService implements IFormulaService {
         return convertToFormula(formulaDao.get(id).get());
     }
 
-    public void createFormula(Formula newFormula) {
+    public void createFormula(Formula newFormula) throws InvalidFormulaException {
         Integer result = calculateResult(newFormula);
         newFormula.setResult(result);
         formulaDao.create(convertToFormulaEntity(newFormula));
     }
 
-    public void updateFormula(Formula updatedFormula) {
+    public void updateFormula(Formula updatedFormula) throws InvalidFormulaException {
         Integer result = calculateResult(updatedFormula);
         updatedFormula.setResult(result);
         formulaDao.update(convertToFormulaEntity(updatedFormula), updatedFormula.getId());

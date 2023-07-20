@@ -1,6 +1,7 @@
 package com.dynamic.calculations.controller;
 
 import com.dynamic.calculations.dto.Formula;
+import com.dynamic.calculations.exception.InvalidFormulaException;
 import com.dynamic.calculations.service.IFormulaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +31,12 @@ public class FormulaController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public void calculateResult(@RequestBody @Valid Formula newFormula) {
+    public void calculateResult(@RequestBody @Valid Formula newFormula) throws InvalidFormulaException {
         formulaService.createFormula(newFormula);
     }
 
     @PutMapping("{id}")
-    public void updateFormula(@RequestBody @Valid Formula updatedFormula) {
+    public void updateFormula(@RequestBody @Valid Formula updatedFormula) throws InvalidFormulaException {
         formulaService.updateFormula(updatedFormula);
     }
 

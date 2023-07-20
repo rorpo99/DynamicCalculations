@@ -1,6 +1,7 @@
 package com.dynamic.calculations;
 
 import com.dynamic.calculations.dto.Formula;
+import com.dynamic.calculations.exception.InvalidFormulaException;
 import com.dynamic.calculations.service.FormulaService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,7 +65,7 @@ public class FormulaServiceTests {
 
     @Test
     @Transactional
-    public void createFormulaAndCheckResult() {
+    public void createFormulaAndCheckResult() throws InvalidFormulaException {
         //answer for this set up is 15
         Formula formula = Formula.builder()
                 .formulaString("x1 and not x3 or (x2 and not (x4 and x2) or x5)")
@@ -87,7 +88,7 @@ public class FormulaServiceTests {
 
     @Test
     @Transactional
-    public void updateVariableValueAndCheckResultChange() {
+    public void updateVariableValueAndCheckResultChange() throws InvalidFormulaException {
         Formula formula = service.getFormula(5);
 
         assertEquals(2, formula.getResult());
@@ -100,7 +101,7 @@ public class FormulaServiceTests {
 
     @Test
     @Transactional
-    public void updateFormulaStringAndCheckResultChange() {
+    public void updateFormulaStringAndCheckResultChange() throws InvalidFormulaException {
         Formula formula = service.getFormula(5);
 
         assertEquals(2, formula.getResult());
